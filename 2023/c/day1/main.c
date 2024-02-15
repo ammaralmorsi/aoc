@@ -17,23 +17,25 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 	int sum = 0;
-	char buf[64];
+	char buf[128];
 	const char* digits[] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+
 	while(fgets(buf, sizeof buf, fp) != NULL){
 		int* f = malloc(sizeof(int)), *l = malloc(sizeof(int));
 		*f = -1;
-		for(int i = 0; buf[i] != '\n' && i < sizeof buf; i++)
+		for(int i = 0; buf[i] != '\n' && i < sizeof(buf); i++)
 			if(isdigit(buf[i])){
 				setfl(f, l, buf[i]-'0');
 			} else {
-				for(int i = 0; i < 9; i++)
-					if(!strncmp(buf+i, digits[i], sizeof(digits[i]))){
-						setfl(f, l, i+1);
+				for(int j = 0; j < 9; j++){
+					if(!strncmp(buf+i, digits[j], strlen(digits[j]))){
+						setfl(f, l, j+1);
 						break;
 					}
+                }
 			}
-
 		sum += *f*10 + *l;
+        free(f); free(l);
 	}
 	fclose(fp);
 	printf("%d\n", sum);
